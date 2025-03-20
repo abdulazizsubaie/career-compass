@@ -1,48 +1,71 @@
-import Link from "next/link";
+'use client';
+
+import { useState } from 'react';
+import { AuthForm } from '@/components/auth/AuthForm';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function Home() {
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const { user } = useAuth();
+
+  if (user) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <main className="container mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+            Welcome to Career Compass
+          </h1>
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">
+              Hello, {user.email}
+            </h2>
+            <p className="text-gray-600">
+              Your AI-powered career guidance journey starts here. Let's begin by understanding
+              your skills and interests.
+            </p>
+            {/* We'll add the assessment button and other features here */}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-8">
-      <div>
-        <h2 className="text-2xl font-semibold text-center border p-4 font-mono rounded-md">
-          Get started by choosing a template path from the /paths/ folder.
-        </h2>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          Career Compass
+        </h1>
+        <p className="text-lg text-gray-600 max-w-md mx-auto">
+          Your AI-powered career guidance platform for IT graduates in Riyadh
+        </p>
       </div>
-      <div>
-        <h1 className="text-6xl font-bold text-center">Make anything you imagine 🪄</h1>
-        <h2 className="text-2xl text-center font-light text-gray-500 pt-4">
-          This whole page will be replaced when you run your template path.
-        </h2>
-      </div>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="border rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 className="text-xl font-semibold">AI Chat App</h3>
-          <p className="mt-2 text-sm text-gray-600">
-            An intelligent conversational app powered by AI models, featuring real-time responses
-            and seamless integration with Next.js and various AI providers.
-          </p>
-        </div>
-        <div className="border rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 className="text-xl font-semibold">AI Image Generation App</h3>
-          <p className="mt-2 text-sm text-gray-600">
-            Create images from text prompts using AI, powered by the Replicate API and Next.js.
-          </p>
-        </div>
-        <div className="border rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 className="text-xl font-semibold">Social Media App</h3>
-          <p className="mt-2 text-sm text-gray-600">
-            A feature-rich social platform with user profiles, posts, and interactions using
-            Firebase and Next.js.
-          </p>
-        </div>
-        <div className="border rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 className="text-xl font-semibold">Voice Notes App</h3>
-          <p className="mt-2 text-sm text-gray-600">
-            A voice-based note-taking app with real-time transcription using Deepgram API, 
-            Firebase integration for storage, and a clean, simple interface built with Next.js.
-          </p>
-        </div>
-      </div>
-    </main>
+
+      <AuthForm mode={authMode} />
+
+      <p className="mt-4 text-gray-600">
+        {authMode === 'login' ? (
+          <>
+            New to Career Compass?{' '}
+            <button
+              onClick={() => setAuthMode('signup')}
+              className="text-blue-600 hover:underline"
+            >
+              Create an account
+            </button>
+          </>
+        ) : (
+          <>
+            Already have an account?{' '}
+            <button
+              onClick={() => setAuthMode('login')}
+              className="text-blue-600 hover:underline"
+            >
+              Sign in
+            </button>
+          </>
+        )}
+      </p>
+    </div>
   );
 }
